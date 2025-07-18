@@ -797,6 +797,101 @@ This comprehensive exercise integrates multiple skills: reading a file, text pro
     garbagecollected,1
     ```
 
+## Section 5: Previous Mettl Questions and Solutions
+
+This section contains actual questions that have appeared in previous Mercer | Mettl Python assessments. Studying these examples will give you insight into the types of problems you might encounter and effective approaches to solving them.
+
+### 5.1 Coding Questions
+
+This subsection presents real coding challenges from past Mettl assessments along with detailed solutions and explanations.
+
+#### 5.1.1 Predicting Possible Winners
+
+* **Problem Statement:** In a tournament, n players are competing. You are given a matrix of match results where each row represents a player and each column represents a match. The values in the matrix have the following meanings:
+  * 1 = win
+  * 0 = lose
+  * 2 = match to be conducted
+  
+  A player is considered a possible winner if their maximum potential score (current wins + unplayed matches) is the highest among all players. Your task is to identify all possible winners.
+
+* **Input:**
+  * n: The number of players
+  * match_results: An n x m matrix where rows are players and columns are matches
+
+* **Output:**
+  * A list of length n where 1 indicates a possible winner and 0 indicates not a possible winner
+
+* **Example:**
+  ```
+  n = 3
+  match_results = [
+      [1, 2, 0],  # Player 0: 1 win, 1 unplayed, 1 loss
+      [0, 1, 2],  # Player 1: 1 win, 1 unplayed, 1 loss
+      [2, 0, 1]   # Player 2: 1 win, 1 unplayed, 1 loss
+  ]
+  ```
+  
+  Each player has 1 win and could potentially win 1 more match, for a maximum potential score of 2. Since all players have the same maximum potential score, they are all possible winners.
+  
+  Output: [1, 1, 1]
+
+* **Solution:**
+
+```python
+def predict_possible_winners(n: int, match_results: list[list[int]]) -> list[int]:
+    """
+    Predicts possible winners from a series of matches based on a results matrix.
+    A player is a possible winner if their maximum potential score (current wins + unplayed matches)
+    is the highest among all players.
+
+    Args:
+        n: The number of players.
+        match_results: An n x m matrix where rows are players and columns are matches.
+                       1 = win, 0 = lose, 2 = match to be conducted.
+
+    Returns:
+        A list of length n where 1 indicates a possible winner and 0 indicates not.
+    """
+    if not match_results or n == 0:
+        return []
+
+    potential_scores = []
+    # Calculate the potential score for each player.
+    for player_results in match_results:
+        current_wins = player_results.count(1)
+        potential_wins = player_results.count(2)
+        potential_score = current_wins + potential_wins
+        potential_scores.append(potential_score)
+    
+    # Find the maximum potential score any player can achieve.
+    if not potential_scores:
+        return [0] * n
+        
+    max_potential_score = max(potential_scores)
+
+    # Determine which players can achieve this maximum score.
+    result = [1 if score == max_potential_score else 0 for score in potential_scores]
+    
+    return result
+```
+
+* **Explanation:**
+  1. We first handle edge cases where there are no players or no match results.
+  2. For each player, we calculate their current number of wins (count of 1s) and potential additional wins (count of 2s).
+  3. The maximum potential score for a player is the sum of these two counts.
+  4. We find the highest potential score among all players.
+  5. A player is a possible winner if their potential score equals this maximum.
+  6. We return a list where each position corresponds to a player, with 1 indicating a possible winner and 0 indicating not.
+
+* **Time Complexity:** O(n*m) where n is the number of players and m is the number of matches per player.
+* **Space Complexity:** O(n) for storing the potential scores and result list.
+
+### 5.2 Multiple Choice Questions
+
+This subsection will contain multiple choice questions from previous Mettl assessments. These questions test your understanding of Python concepts, syntax, and behavior.
+
+*Note: This section will be populated with questions as they become available.*
+
 ## Conclusion: Final Preparations and Test-Day Mindset
 
 Successfully navigating the Mercer | Mettl Python assessment is a function of thorough preparation, strategic thinking, and a calm, focused mindset on test day. This guide has provided a comprehensive roadmap, deconstructing the test's components and offering detailed preparation materials for each section.
