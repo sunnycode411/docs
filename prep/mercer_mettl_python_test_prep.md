@@ -354,16 +354,142 @@ Coding challenges are often designed to test the clever application of Python's 
     * **Problem:** Given a string containing brackets `()`, `{}`, `[]`, determine if the brackets are balanced. For example, `"{[()]}"` is balanced, but `"{[(])}"` is not.
     * **Solution Approach:** Use a list as a stack. Iterate through the string. If an opening bracket is found, push it onto the stack. If a closing bracket is found, check if the stack is empty or if the top of the stack is the corresponding opening bracket. If it is, pop from the stack. If not, the string is unbalanced. After the loop, if the stack is empty, the string is balanced.
     * **Key Data Structure:** The list's `append()` (push) and `pop()` methods provide LIFO (Last-In, First-Out) behavior, perfectly modeling a stack.
+    * **Implementation:**
+    ```python
+    def check_balanced_parentheses(s: str) -> bool:
+        """
+        Checks if a string containing brackets (), {}, [] has balanced parentheses.
+        This function uses a list as a stack (LIFO - Last-In, First-Out).
+
+        Args:
+            s: The input string containing brackets.
+
+        Returns:
+            True if the brackets are balanced, False otherwise.
+        """
+        # The stack will store the opening brackets as we find them.
+        stack = []
+        
+        # A mapping to quickly find the corresponding opening bracket for any closing bracket.
+        bracket_map = {")": "(", "}": "{", "]": "["}
+
+        # Iterate through each character in the input string.
+        for char in s:
+            # If the character is a closing bracket...
+            if char in bracket_map:
+                # Check if the stack is empty. If it is, there's no opening bracket to match.
+                # Then, pop the top element from the stack if it's not empty, otherwise use a dummy value.
+                top_element = stack.pop() if stack else '#'
+                
+                # If the popped element is not the corresponding opening bracket, the string is unbalanced.
+                if bracket_map[char] != top_element:
+                    return False
+            else:
+                # If it's an opening bracket, push it onto the stack.
+                stack.append(char)
+
+        # After the loop, if the stack is empty, all brackets were matched correctly.
+        # If the stack is not empty, it means there are unmatched opening brackets.
+        return not stack
+    ```
 
 * **Dictionaries (for Hashing/Counting): Find the First Non-Repeated Character**
     * **Problem:** Given a string, find its first non-repeating character. For "swiss", the answer is "w".
     * **Solution Approach:** Use a dictionary (or a `collections.Counter`) to store the frequency of each character. Iterate through the string once to build this frequency map. Then, iterate through the string a second time and return the first character whose count in the map is 1.
     * **Key Data Structure:** The dictionary provides $O(1)$ average time complexity for insertion and lookup, making the counting process highly efficient.
+    * **Implementation:**
+    ```python
+    def find_first_non_repeated_character(s: str) -> str | None:
+        """
+        Finds the first non-repeating character in a string.
+        This function uses a dictionary to store character frequencies for efficient lookup.
+
+        Args:
+            s: The input string.
+
+        Returns:
+            The first non-repeating character, or None if all characters repeat.
+        """
+        # First pass: Build a frequency map of each character in the string.
+        # The dictionary provides O(1) average time complexity for insertion.
+        char_counts = {}
+        for char in s:
+            char_counts[char] = char_counts.get(char, 0) + 1
+
+        # Second pass: Iterate through the string again to find the first character
+        # with a count of 1. This preserves the order.
+        for char in s:
+            if char_counts[char] == 1:
+                return char
+
+        # If the loop completes, it means no non-repeating character was found.
+        return None
+    ```
 
 * **Sets (for Uniqueness and Membership): Find Unique Elements**
     * **Problem:** Given two lists of numbers, find all numbers that appear in the first list but not in the second.
     * **Solution Approach:** Convert both lists into sets. The set data structure automatically handles duplicates and provides highly optimized operations. Use the set difference operator (`-`) or the `.difference()` method to find the required elements.
     * **Key Data Structure:** Sets provide $O(1)$ average time complexity for membership testing, making the difference operation much faster than a nested loop approach on lists.
+    * **Implementation:**
+    ```python
+    def find_unique_elements_in_first_list(list1: list, list2: list) -> list:
+        """
+        Finds all elements that appear in the first list but not in the second.
+        This function uses sets for their highly efficient difference operation.
+
+        Args:
+            list1: The first list of elements.
+            list2: The second list of elements.
+
+        Returns:
+            A list of elements unique to the first list.
+        """
+        # Convert the lists to sets. This automatically handles duplicates and
+        # provides O(1) average time complexity for membership testing.
+        set1 = set(list1)
+        set2 = set(list2)
+
+        # The set difference operator (-) returns a new set containing elements
+        # that are in set1 but not in set2.
+        difference_set = set1 - set2
+
+        # Convert the resulting set back to a list before returning.
+        return list(difference_set)
+    ```
+    
+    **Example Usage:**
+    ```python
+    # --- Example Usage ---
+    if __name__ == "__main__":
+        print("--- 1. Balanced Parentheses (List as Stack) ---")
+        str1 = "{[()]}" 
+        str2 = "{[(])}" 
+        str3 = "((()))" 
+        str4 = "(()" 
+        print(f"Is '{str1}' balanced? {check_balanced_parentheses(str1)}") # Expected: True
+        print(f"Is '{str2}' balanced? {check_balanced_parentheses(str2)}") # Expected: False
+        print(f"Is '{str3}' balanced? {check_balanced_parentheses(str3)}") # Expected: True
+        print(f"Is '{str4}' balanced? {check_balanced_parentheses(str4)}") # Expected: False
+        print("-" * 20)
+
+        print("\n--- 2. First Non-Repeated Character (Dictionary) ---")
+        str_a = "swiss"
+        str_b = "aabbcc"
+        str_c = "programming"
+        print(f"First non-repeated in '{str_a}': {find_first_non_repeated_character(str_a)}") # Expected: w
+        print(f"First non-repeated in '{str_b}': {find_first_non_repeated_character(str_b)}") # Expected: None
+        print(f"First non-repeated in '{str_c}': {find_first_non_repeated_character(str_c)}") # Expected: p
+        print("-" * 20)
+
+        print("\n--- 3. Unique Elements (Sets) ---")
+        list_x = [1, 2, 3, 4, 5, 6]
+        list_y = [4, 5, 6, 7, 8, 9]
+        unique_to_x = find_unique_elements_in_first_list(list_x, list_y)
+        print(f"List 1: {list_x}")
+        print(f"List 2: {list_y}")
+        print(f"Elements in List 1 but not in List 2: {unique_to_x}") # Expected: [1, 2, 3] (order may vary)
+        print("-" * 20)
+    ```
 
 ### 2.4 The Power of Recursion
 
