@@ -888,9 +888,70 @@ def predict_possible_winners(n: int, match_results: list[list[int]]) -> list[int
 
 ### 5.2 Multiple Choice Questions
 
-This subsection will contain multiple choice questions from previous Mettl assessments. These questions test your understanding of Python concepts, syntax, and behavior.
+This subsection contains multiple choice questions from previous Mettl assessments. These questions test your understanding of Python concepts, syntax, and behavior, as well as framework-specific knowledge.
 
-*Note: This section will be populated with questions as they become available.*
+#### 5.2.1 Django Framework Questions
+
+**Question 1:** Which of the following is the correct way to create a Django view that handles both HTTP GET and POST methods?
+
+a)
+```python
+from django.http import HttpResponse
+
+def my_view(request):
+    if request.method == 'GET':
+        return HttpResponse('This is a GET request')
+    elif request.method == 'POST':
+        return HttpResponse('This is a POST request')
+```
+
+b)
+```python
+from django.http import HttpResponse
+
+@require_http_methods(['GET', 'POST'])
+def my_view(request):
+    if request.method == 'GET':
+        return HttpResponse('This is a GET request')
+    else:
+        return HttpResponse('This is a POST request')
+```
+
+c)
+```python
+from django.http import HttpResponse
+from django.views import View
+
+class MyView(View):
+    def get(self, request):
+        return HttpResponse('This is a GET request')
+    
+    def post(self, request):
+        return HttpResponse('This is a POST request')
+```
+
+d)
+```python
+from django.http import HttpResponse
+
+def get_view(request):
+    return HttpResponse('This is a GET request')
+
+def post_view(request):
+    return HttpResponse('This is a POST request')
+```
+
+**Answer: Both a) and c) are correct.**
+
+**Explanation:** Django provides multiple ways to handle HTTP methods in views:
+
+1. Option a) uses a function-based view with a conditional check on `request.method`. This is a valid approach where a single function handles different HTTP methods based on the request type.
+
+2. Option b) is almost correct but has a missing import. It should include `from django.views.decorators.http import require_http_methods` to use the decorator. The decorator ensures the view only responds to the specified HTTP methods.
+
+3. Option c) uses Django's class-based views by extending the `View` class. This is a more object-oriented approach where each HTTP method is handled by a separate method in the class. This approach is particularly clean when handling multiple HTTP methods.
+
+4. Option d) is incorrect because it defines two separate view functions instead of a single view that can handle both methods. In Django, a view is mapped to a URL, and that view needs to handle all relevant HTTP methods for that URL.
 
 ## Conclusion: Final Preparations and Test-Day Mindset
 
